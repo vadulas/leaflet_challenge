@@ -1,5 +1,4 @@
 // Create the tile layers
-
 var defaultMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	maxZoom: 19,
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -80,11 +79,11 @@ legend.onAdd = function(){
     for (var i = 0; i < intervals.length; i++){
         // Use innner html to set the quare for each interval and label
 
-        div.innerHTML += "<i style=background: "
-                + colors[i]
+        div.innerHTML += "<i style=background:"
+                + colors[i] 
                 + "></i>"
                 + intervals[i]
-                + (intervals[i+1] ? "km &ndash; km" + intervals[i+1] + "<br>" : "+");
+                + (intervals[i+1] ? "km &ndash;" + intervals[i+1] + "km" + "<br>" : "+");
     }
 
     return div;
