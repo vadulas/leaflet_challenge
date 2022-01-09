@@ -13,6 +13,7 @@ var grey_scale = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-li
 	ext: 'png'
 });
 
+// water color layer
 var watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 	subdomains: 'abcd',
@@ -21,12 +22,13 @@ var watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercol
 	ext: 'jpg'
 });
 
+// topo layer
 var topoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
 	maxZoom: 17,
 	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 });
 
-// make a bse map
+// make a base map
 let basemaps = {Default: defaultMap, GrayScale: grey_scale, WaterColor: watercolor, OpenTopoMap:topoMap}
 
 // Make a map object
@@ -45,6 +47,8 @@ let tectonicplates  = new L.layerGroup();
 d3.json("https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json").
 then(createTectonicPlates);
 
+
+//Get the data for the earthquake and add the markers
 // variable to hold the earthquakes layer
 let earthquakes  = new L.layerGroup();
 // Get the data for earth quakes and populate the layergroup
@@ -91,7 +95,10 @@ legend.onAdd = function(){
 
 legend.addTo(myMap);
 
-
+/**
+ * Function to draw the tectonic plates on the map
+ * @param {*} response 
+ */
 function createTectonicPlates(response){
     // Load the data using geoJSON and add to the tectonic plate layers
     L.geoJson(response, {
@@ -105,6 +112,10 @@ function createTectonicPlates(response){
     let earthquakes  = new L.layerGroup();
 }
 
+/**
+ * Function to create the earthquake markers
+ * @param {*} response 
+ */
 function createEarthquakeMarkers(response){
 
     // plot circle where the radius is dependent on the magnitude and the color on depth
@@ -130,7 +141,11 @@ function createEarthquakeMarkers(response){
     earthquakes.addTo(myMap);
 }
 
-
+/**
+ * Function to determine the color depending on the depth of the earth quake
+ * @param {*} depth 
+ * @returns 
+ */
 function dataColor(depth){
     if (depth > 90) return "red";
     else if (depth > 70) return "#fc4903";
@@ -140,11 +155,21 @@ function dataColor(depth){
     else return "green";
 }
 
+/**
+ * Function to determine the radius of the marker depending on the magnitude of the earthquake
+ * @param {*} magnitude 
+ * @returns 
+ */
 function radiusSize(magnitude){
     if (magnitude == 0) return 1; //to make sure a 0 mag earthquake shows up
     else return magnitude * 5;
 }
 
+/**
+ * Function to style the earthquake markers
+ * @param {*} feature 
+ * @returns 
+ */
 function dataStyle(feature){
 
     return {
